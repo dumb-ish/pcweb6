@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Form, Nav, Navbar} from "react-bootstrap";
+import { Button, Container, Form, Image, Nav, Navbar} from "react-bootstrap";
 import { addDoc, collection } from "firebase/firestore";   
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { signOut } from "firebase/auth"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
 
 export default function PostPageAdd() {
     const [user, loading] = useAuthState(auth);
     const [caption, setCaption] = useState("")
     const [image, setImage] = useState("")
+    const [previewImage, setPreviewImage] = useState(
+        "https://zca.sg/img/placeholder"
+    );
+    const [imageName, setImageName]=useState("")
     const navigate = useNavigate();
 
     async function addPost() {
-        await addDoc(collection(db, "posts"), { caption, image });
+        const imageReference = ref(storage, `images/${image.name}`);
+        const response = await uploadBytes(imageReference, image);
+        const imageUrl = await getDownloadURL(response.ref);
+        await addDoc(collection(db, "posts"), { caption, image: imageUrl, imageName:imageName});
         navigate("/");
     }
 
@@ -45,18 +54,25 @@ export default function PostPageAdd() {
               onChange={(text) => setCaption(text.target.value)}
             />
           </Form.Group>
-
-          <Form.Group className="mb-3" controlId="image">
-            <Form.Label>Image URL</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="https://zca.sg/img/1"
-              value={image}
-              onChange={(text) => setImage(text.target.value)}
+          <Image
+            src={previewImage}
+            style={{
+                objectFit: "cover",
+                width: "10rem",
+                height: "10rem",
+            }}
             />
-            <Form.Text className="text-muted">
-              Make sure the url has a image type at the end: jpg, jpeg, png.
-            </Form.Text>
+            <Form.Group className="mb-3" controlId="image">
+            <Form.Control
+              type="file"
+              onChange={(e) => {
+                const imageFile = e.target.files[0];
+                const previewImage = URL.createObjectURL(imageFile);
+                setImage(imageFile);
+                setPreviewImage(previewImage);
+                setImageName(imageFile.name)
+            }}
+            />
           </Form.Group>
           <Button variant="primary" onClick={async (e) => addPost()}>
             Submit
