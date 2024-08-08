@@ -35,9 +35,9 @@ export default function PostPageAdd() {
         <>
             <Navbar variant="light" bg="light">
                 <Container>
-                    <Navbar.Brand href="/">Tinkergram</Navbar.Brand>
+                    <Navbar.Brand href="/home">FatFree</Navbar.Brand>
                     <Nav>
-                        <Nav.Link href="/add">New Post</Nav.Link>
+                        <Nav.Link href="/tracker">Tracker</Nav.Link>
                         <Nav.Link onClick={(e) => signOut(auth)}>LogOut</Nav.Link>
                     </Nav>
                 </Container>

@@ -45,7 +45,7 @@ export default function LoginPage() {
                     if (canLogin)
                         try {
                             await signInWithEmailAndPassword(auth, username, password);
-                            navigate("/");
+                            navigate("/home");
                         } catch (error) {
                             setError(error.message);
                         }

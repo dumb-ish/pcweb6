@@ -5,14 +5,16 @@ import SignUpPage from "./views/SignUpPage";
 import PostPageAdd from "./views/PostPageAdd";
 import PostPageDetails from "./views/PostPageDetails";
 import PostPageUpdate from "./views/PostPageUpdate";
+import StartScreen from "./views/StartScreen"
 
 function App() {
  
   const router = createBrowserRouter([
-    { path: "/", element: <PostPageHome />},
+    { path: "/", element: <StartScreen />},
     { path: "/login", element: <LoginPage />},
     { path: "/signup", element: <SignUpPage />},
-    { path: "/add", element: <PostPageAdd />},
+    { path: "/home", element: <PostPageHome />},
+    { path: "/tracker", element: <PostPageAdd />},
     { path: "/post/:id", element: <PostPageDetails />},
     { path: "/update/:id", element: <PostPageUpdate />},
   ])

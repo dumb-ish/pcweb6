@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword} from "firebase/auth";
 import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ export default function SignUpPage() {
             if (canSignup)
               try {
                 await createUserWithEmailAndPassword(auth, username, password);
-                navigate("/")
+                navigate("/home")
               } catch (error) {
                 setError(error.message);
               }
